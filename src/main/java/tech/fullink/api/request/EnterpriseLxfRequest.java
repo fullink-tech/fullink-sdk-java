@@ -1,0 +1,116 @@
+package tech.fullink.api.request;
+
+import tech.fullink.api.FullinkApiException;
+import tech.fullink.api.FullinkRequest;
+import tech.fullink.api.response.EnterpriseLxfResponse;
+import tech.fullink.api.util.DesEncrypt;
+
+/**
+ * @author crow
+ */
+public class EnterpriseLxfRequest implements FullinkRequest<EnterpriseLxfResponse> {
+    private String apiVersion = "1.0";
+
+    private String customerId;
+
+    private String customerProdId;
+
+    private String customerRequestId;
+
+    private Long timestamp;
+
+    private String sign;
+
+    private String uscc;
+
+    private String mobile;
+
+    @Override
+    public String getApiMethodName() {
+        return "fullink.lxf.enterprise";
+    }
+
+    @Override
+    public String getApiVersion() {
+        return this.apiVersion;
+    }
+
+    @Override
+    public Class<EnterpriseLxfResponse> getResponseClass() {
+        return EnterpriseLxfResponse.class;
+    }
+
+    @Override
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    @Override
+    public void setSign(String sign) {
+        // 此处sign入参作为desKey使用
+        if (null == this.timestamp) {
+            this.timestamp = System.currentTimeMillis();
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("customerId=").append(this.customerId)
+                .append("&customerProdId=").append(this.customerProdId)
+                .append("&customerRequestId=").append(this.customerRequestId)
+                .append("&ucc=").append(this.uscc)
+                .append("&mobile=").append(null == this.mobile ? "" : this.mobile)
+                .append("&timestamp=").append(timestamp);
+        try {
+            this.sign = DesEncrypt.encrypt(sb.toString(), sign, "utf-8");
+        } catch (FullinkApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public String getSign() {
+        return this.sign;
+    }
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    public String getCustomerProdId() {
+        return customerProdId;
+    }
+
+    public void setCustomerProdId(String customerProdId) {
+        this.customerProdId = customerProdId;
+    }
+
+    public String getCustomerRequestId() {
+        return customerRequestId;
+    }
+
+    public void setCustomerRequestId(String customerRequestId) {
+        this.customerRequestId = customerRequestId;
+    }
+
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
+    public String getUscc() {
+        return uscc;
+    }
+
+    public void setUscc(String uscc) {
+        this.uscc = uscc;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+}
