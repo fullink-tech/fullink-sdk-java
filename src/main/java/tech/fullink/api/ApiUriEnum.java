@@ -6,7 +6,7 @@ package tech.fullink.api;
  */
 public enum ApiUriEnum {
     /***/
-    LXF("fullink.lxf.personal", "/lxf"),
+    LXF("fullink.lxf.personal", "/report"),
     LXF_ENTERPRISE("fullink.lxf.enterprise", "/enterprise"),
     ;
     private final String method;
