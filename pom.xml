@@ -7,7 +7,7 @@
     <groupId>tech.fullink.sdk</groupId>
     <artifactId>fullink-sdk-java</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 
     <name>fullink-sdk-java</name>
     <description>Lxf SDK for java</description>
