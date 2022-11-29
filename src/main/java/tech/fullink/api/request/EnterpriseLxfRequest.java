@@ -4,6 +4,7 @@ import tech.fullink.api.FullinkApiException;
 import tech.fullink.api.FullinkRequest;
 import tech.fullink.api.response.EnterpriseLxfResponse;
 import tech.fullink.api.util.DesEncrypt;
+import tech.fullink.api.util.StringUtils;
 
 /**
  * @author crow
@@ -24,6 +25,10 @@ public class EnterpriseLxfRequest implements FullinkRequest<EnterpriseLxfRespons
     private String uscc;
 
     private String mobile;
+
+    private String name;
+
+    private String idCardNo;
 
     @Override
     public String getApiMethodName() {
@@ -56,8 +61,14 @@ public class EnterpriseLxfRequest implements FullinkRequest<EnterpriseLxfRespons
                 .append("&customerProdId=").append(this.customerProdId)
                 .append("&customerRequestId=").append(this.customerRequestId)
                 .append("&ucc=").append(this.uscc)
-                .append("&mobile=").append(null == this.mobile ? "" : this.mobile)
-                .append("&timestamp=").append(timestamp);
+                .append("&mobile=").append(null == this.mobile ? "" : this.mobile);
+        if (!StringUtils.isEmpty(this.name)) {
+            sb.append("&name=").append(this.name);
+        }
+        if (!StringUtils.isEmpty(this.idCardNo)) {
+            sb.append("&idCardNo=").append(this.idCardNo);
+        }
+        sb.append("&timestamp=").append(timestamp);
         try {
             this.sign = DesEncrypt.encrypt(sb.toString(), sign, "utf-8");
         } catch (FullinkApiException e) {
@@ -112,5 +123,21 @@ public class EnterpriseLxfRequest implements FullinkRequest<EnterpriseLxfRespons
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getIdCardNo() {
+        return idCardNo;
+    }
+
+    public void setIdCardNo(String idCardNo) {
+        this.idCardNo = idCardNo;
     }
 }

@@ -20,7 +20,7 @@ public class FullinkClientTest {
         client = new DefaultFullinkClient(
                 "http://lxf.fullink.test",
                 "xxx",
-                "xxx"
+                "xxxx"
         );
     }
 
@@ -44,6 +44,9 @@ public class FullinkClientTest {
         request.setCustomerId("xxx");
         request.setCustomerProdId("xxx");
         request.setUscc("12345677");
+        request.setMobile("13300000001");
+        request.setName("张三");
+        request.setIdCardNo("1222313123123123");
         EnterpriseLxfResponse response = client.execute(request);
         System.out.println(JSON.toJSONString(response));
     }
