@@ -54,14 +54,12 @@ public class WebUtils {
         String rsp = null;
 
         try {
-            Map map;
             try {
                 conn = getConnection(new URL(url), METHOD_POST, ctype, headers);
 
                 conn.setConnectTimeout(connectTimeout);
                 conn.setReadTimeout(readTimeout);
             } catch (IOException e) {
-                map = getParamsFromUrl(url);
                 SdkLogger.logCommError(e, url, content);
                 throw e;
             }
@@ -74,7 +72,6 @@ public class WebUtils {
                     resHeaders.put("trace_id", conn.getHeaderField("trace_id"));
                 }
             } catch (IOException e) {
-                map = getParamsFromUrl(url);
                 SdkLogger.logCommError(e, conn, content);
                 throw e;
             }

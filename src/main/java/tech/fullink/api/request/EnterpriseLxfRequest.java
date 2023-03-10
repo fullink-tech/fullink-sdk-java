@@ -30,6 +30,8 @@ public class EnterpriseLxfRequest implements FullinkRequest<EnterpriseLxfRespons
 
     private String idCardNo;
 
+    private String orgName;
+
     @Override
     public String getApiMethodName() {
         return "fullink.lxf.enterprise";
@@ -67,6 +69,9 @@ public class EnterpriseLxfRequest implements FullinkRequest<EnterpriseLxfRespons
         }
         if (!StringUtils.isEmpty(this.idCardNo)) {
             sb.append("&idCardNo=").append(this.idCardNo);
+        }
+        if (!StringUtils.isEmpty(this.orgName)) {
+            sb.append("&orgName=").append(this.orgName);
         }
         sb.append("&timestamp=").append(timestamp);
         try {
@@ -139,5 +144,13 @@ public class EnterpriseLxfRequest implements FullinkRequest<EnterpriseLxfRespons
 
     public void setIdCardNo(String idCardNo) {
         this.idCardNo = idCardNo;
+    }
+
+    public String getOrgName() {
+        return orgName;
+    }
+
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
     }
 }
