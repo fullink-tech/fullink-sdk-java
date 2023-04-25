@@ -18,4 +18,13 @@ public interface FullinkRequest<T extends FullinkResponse> {
     void setSign(String sign);
 
     String getSign();
+
+    String getBizData();
+
+    void setBizData(String bizData);
+
+    FullinkObject getBizModel();
+
+    void setBizModel(FullinkObject bizModel);
+
 }

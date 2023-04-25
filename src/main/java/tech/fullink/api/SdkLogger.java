@@ -163,4 +163,10 @@ public class SdkLogger {
         }
     }
 
+    public static void logBizError(Throwable t) {
+        if (needEnableLogger) {
+            blog.error(t);
+        }
+    }
+
 }

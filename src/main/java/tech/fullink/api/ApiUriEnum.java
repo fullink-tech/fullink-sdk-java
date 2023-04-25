@@ -8,6 +8,8 @@ public enum ApiUriEnum {
     /***/
     LXF("fullink.lxf.personal", "/report/encode"),
     LXF_ENTERPRISE("fullink.lxf.enterprise", "/enterprise"),
+
+    LXF_COMMON("fullink.lxf.common", "/common")
     ;
     private final String method;
     private final String uri;

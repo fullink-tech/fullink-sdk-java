@@ -1,6 +1,7 @@
 package tech.fullink.api.request;
 
 import tech.fullink.api.FullinkApiException;
+import tech.fullink.api.FullinkObject;
 import tech.fullink.api.FullinkRequest;
 import tech.fullink.api.response.PersonalLxfResponse;
 import tech.fullink.api.util.DesEncrypt;
@@ -122,5 +123,25 @@ public class PersonalLxfRequest implements FullinkRequest<PersonalLxfResponse> {
 
     public void setIdCardNo(String idCardNo) {
         this.idCardNo = idCardNo;
+    }
+
+    @Override
+    public String getBizData() {
+        return null;
+    }
+
+    @Override
+    public void setBizData(String bizData) {
+
+    }
+
+    @Override
+    public FullinkObject getBizModel() {
+        return null;
+    }
+
+    @Override
+    public void setBizModel(FullinkObject bizModel) {
+
     }
 }

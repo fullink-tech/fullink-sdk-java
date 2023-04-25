@@ -1,6 +1,7 @@
 package tech.fullink.api.request;
 
 import tech.fullink.api.FullinkApiException;
+import tech.fullink.api.FullinkObject;
 import tech.fullink.api.FullinkRequest;
 import tech.fullink.api.response.EnterpriseLxfResponse;
 import tech.fullink.api.util.DesEncrypt;
@@ -152,5 +153,25 @@ public class EnterpriseLxfRequest implements FullinkRequest<EnterpriseLxfRespons
 
     public void setOrgName(String orgName) {
         this.orgName = orgName;
+    }
+
+    @Override
+    public String getBizData() {
+        return null;
+    }
+
+    @Override
+    public void setBizData(String bizData) {
+
+    }
+
+    @Override
+    public FullinkObject getBizModel() {
+        return null;
+    }
+
+    @Override
+    public void setBizModel(FullinkObject bizModel) {
+
     }
 }

@@ -1,6 +1,8 @@
 package tech.fullink.api;
 
 import com.alibaba.fastjson.JSON;
+
+import tech.fullink.api.util.SerialUtil;
 import tech.fullink.api.util.StringUtils;
 import tech.fullink.api.util.WebUtils;
 
@@ -40,32 +42,9 @@ public abstract class AbstractFullinkClient implements FullinkClient {
 
     @Override
     public <T extends FullinkResponse> T execute(FullinkRequest<T> request) {
-        T tRsp = null;
-        long beginTime = System.currentTimeMillis();
-
+        T tRsp;
         try {
-            Map<String, Object> rt = this.doPost(request);
-            Map<String, Long> costTimeMap = new HashMap();
-            if (rt.containsKey("prepareTime")) {
-                costTimeMap.put("prepareCostTime", (Long)rt.get("prepareTime") - beginTime);
-                if (rt.containsKey("requestTime")) {
-                    costTimeMap.put("requestCostTime", (Long)rt.get("requestTime") - (Long)rt.get("prepareTime"));
-                }
-            }
-
-            String rsp = (String) rt.get("rsp");
-
-            tRsp = JSON.parseObject(rsp, request.getResponseClass());
-
-            if (costTimeMap.containsKey("requestCostTime")) {
-                costTimeMap.put("postCostTime", System.currentTimeMillis() - (Long)rt.get("requestTime"));
-            }
-
-            if (!tRsp.isOk()) {
-                SdkLogger.logErrorScene(rt, tRsp, costTimeMap);
-            } else {
-                SdkLogger.logBizSummary(rt, tRsp, costTimeMap);
-            }
+            tRsp = _execute(request);
             ResponseEncryptItem encryptItem = this.decryptResponse(tRsp);
 
             FullinkHashMap score = JSON.parseObject(encryptItem.getRealContent(), FullinkHashMap.class);
@@ -73,7 +52,46 @@ public abstract class AbstractFullinkClient implements FullinkClient {
         } catch (FullinkApiException e) {
             throw new RuntimeException(e);
         }
+        return tRsp;
+    }
 
+    @Override
+    public <T extends FullinkResponse> T commonExecute(FullinkRequest<T> request) {
+        T tRsp;
+        try {
+            tRsp = _execute(request);
+        } catch (FullinkApiException e) {
+            throw new RuntimeException(e);
+        }
+        return tRsp;
+    }
+
+    private <T extends FullinkResponse> T _execute(FullinkRequest<T> request) throws FullinkApiException {
+        T tRsp;
+        long beginTime = System.currentTimeMillis();
+
+        Map<String, Object> rt = this.doPost(request);
+        Map<String, Long> costTimeMap = new HashMap();
+        if (rt.containsKey("prepareTime")) {
+            costTimeMap.put("prepareCostTime", (Long)rt.get("prepareTime") - beginTime);
+            if (rt.containsKey("requestTime")) {
+                costTimeMap.put("requestCostTime", (Long)rt.get("requestTime") - (Long)rt.get("prepareTime"));
+            }
+        }
+
+        String rsp = (String) rt.get("rsp");
+
+        tRsp = JSON.parseObject(rsp, request.getResponseClass());
+
+        if (costTimeMap.containsKey("requestCostTime")) {
+            costTimeMap.put("postCostTime", System.currentTimeMillis() - (Long)rt.get("requestTime"));
+        }
+
+        if (!tRsp.isOk()) {
+            SdkLogger.logErrorScene(rt, tRsp, costTimeMap);
+        } else {
+            SdkLogger.logBizSummary(rt, tRsp, costTimeMap);
+        }
         return tRsp;
     }
 
@@ -98,8 +116,16 @@ public abstract class AbstractFullinkClient implements FullinkClient {
     }
 
     private <T extends FullinkResponse> String jsonContentWithSign(FullinkRequest<T> request) {
-        request.setSign(this.getEncryptor().getEncryptKey());
-        return JSON.toJSONString(request);
+        try {
+            if (request.getBizModel() != null &&
+                StringUtils.isEmpty(request.getBizData())) {
+                request.setBizData(SerialUtil.toJSONString(request.getBizModel()));
+            }
+            request.setSign(this.getEncryptor().getEncryptKey());
+        } catch (SecurityException e) {
+            SdkLogger.logBizError(e);
+        }
+        return SerialUtil.toJSONString(request);
     }
 
     private <T extends FullinkResponse> ResponseEncryptItem decryptResponse(T t) throws FullinkApiException {
