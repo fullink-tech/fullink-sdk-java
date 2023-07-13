@@ -1,6 +1,5 @@
 package tech.fullink.api.util;
 
-import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
@@ -18,8 +17,16 @@ public class Md5Encrypt {
     public static String encrypt(String content) throws FullinkApiException {
         try {
             MessageDigest md = MessageDigest.getInstance(MD5_ALG);
-            md.update(content.getBytes(StandardCharsets.UTF_8));
-            return new BigInteger(1, md.digest()).toString(16);
+            byte[] bytes = md.digest(content.getBytes(StandardCharsets.UTF_8));
+
+            char[] hexArr = "0123456789abcdef".toCharArray();
+            StringBuilder ret = new StringBuilder(bytes.length * 2);
+
+            for (byte aByte : bytes) {
+                ret.append(hexArr[aByte >> 4 & 15]);
+                ret.append(hexArr[aByte & 15]);
+            }
+            return ret.toString();
         } catch (Exception e) {
             throw new FullinkApiException(String.format(ApiErrorEnum.ENCRYPT_MD5_ERROR.getErrMsg(), content), e);
         }
