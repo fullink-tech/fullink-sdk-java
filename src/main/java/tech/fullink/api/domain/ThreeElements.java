@@ -16,6 +16,8 @@ public class ThreeElements extends FullinkObject implements Serializable {
 
     private String encryptType;
 
+    private String queryDate;
+
     public String getName() {
         return name;
     }
@@ -46,5 +48,13 @@ public class ThreeElements extends FullinkObject implements Serializable {
 
     public void setEncryptType(String encryptType) {
         this.encryptType = encryptType;
+    }
+
+    public String getQueryDate() {
+        return queryDate;
+    }
+
+    public void setQueryDate(String queryDate) {
+        this.queryDate = queryDate;
     }
 }

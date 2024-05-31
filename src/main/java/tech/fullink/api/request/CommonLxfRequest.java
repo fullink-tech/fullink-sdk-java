@@ -26,6 +26,8 @@ public class CommonLxfRequest implements FullinkRequest<CommonLxfResponse> {
 
     private String sign;
 
+    private String prune;
+
     public void setApiVersion(String apiVersion) {
         this.apiVersion = apiVersion;
     }
@@ -120,5 +122,13 @@ public class CommonLxfRequest implements FullinkRequest<CommonLxfResponse> {
     @Override
     public void setBizModel(FullinkObject bizModel) {
         this.bizModel = bizModel;
+    }
+
+    public String getPrune() {
+        return prune;
+    }
+
+    public void setPrune(String prune) {
+        this.prune = prune;
     }
 }
